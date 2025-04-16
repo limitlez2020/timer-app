@@ -54,8 +54,26 @@ export default function Home() {
       {/* Body: */}
       {timerScrn ? (
         /* Timer Screen Body */
-        <div className="flex flex-col w-full h-full mt-10 bg-neutral-900 justify-center items-center">
-          <div className="text-neutral-300">Set Timer</div>
+        <div className="flex flex-col w-full h-full mt-10 justify-center items-center bg-neutral-900 text-neutral-300">
+          <p className="text-neutral-300 mb-10 text-xl">Set Timer</p>
+          {/* Input fields */}
+          <div className="flex flex-row w-4/5 justify-between items-center gap-5 text-7xl">
+            {/* Hour */}
+            <div className="flex flex-col justify-center items-center w-1/3">
+              <input type="number" className="flex w-full border-b p-5 border-neutral-200 text-center" min={0} defaultValue={0}/>
+              <p className="text-sm mt-3">hours</p>
+            </div>
+            {/* Minute */}
+            <div className="flex flex-col justify-center items-center w-1/3">
+              <input type="number" className="flex w-full border-b p-5 border-neutral-200 text-center" min={0} max={59} defaultValue={0}/>
+              <p className="text-sm mt-3">minutes</p>
+            </div>
+            {/* Seconds */}
+            <div className="flex flex-col justify-center items-center w-1/3">
+              <input type="number" className="flex w-full border-b p-5 border-neutral-200 text-center" min={0} max={59} defaultValue={0}/>
+              <p className="text-sm mt-3">seconds</p>
+            </div>
+          </div>
         </div>
 
       ) : (
