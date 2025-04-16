@@ -4,11 +4,14 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
+import { ArrowRightIcon, PlayIcon } from "@heroicons/react/24/solid"
 
 export default function Home() {
   const [hour, setHour] = useState("")
   const [minute, setMinute] = useState("")
   const [ampm, setAmpm] = useState("")
+
+  const [timerScrn, setTimerScrn] = useState(false)
 
 
   /* Get the date every second: */
@@ -36,6 +39,9 @@ export default function Home() {
       const minute = String(date.getMinutes())
       setMinute(minute.padStart(2, "0"))
     }, 1000)
+
+    /* Clear the interval: */
+    return () => {clearInterval(interval)}
   }, [])
 
 
@@ -46,20 +52,38 @@ export default function Home() {
       <NavBar/>
 
       {/* Body: */}
-      <div className="flex flex-col w-full h-full bg-neutral-900 justify-center items-center">
-        {/* Time: */}
-        <div className="flex justify-between gap-5 w-4/5 text-neutral-300">
-          {/* Hour: */}
-          <div className="flex justify-center items-center w-1/2 py-10 text-[200px] border border-neutral-400">
-            {hour}
-          </div>
-          {/* Minute: */}
-          <div className="flex relative justify-center w-1/2 py-10 border border-neutral-400">
-            <p className="text-[200px]">{minute}</p>
-            <p className="absolute bottom-0 right-0 p-5 text-lg">{ampm}</p>
-          </div>
+      {timerScrn ? (
+        /* Timer Screen Body */
+        <div className="flex flex-col w-full h-full mt-10 bg-neutral-900 justify-center items-center">
+          <div className="text-neutral-300">Set Timer</div>
         </div>
-      </div>
+
+      ) : (
+        /* Home Screen Body*/
+        <div className="flex flex-col w-full h-full mt-10 bg-neutral-900 justify-center items-center">
+          {/* Time: */}
+          <div className="flex justify-between gap-5 w-4/5 text-neutral-300">
+            {/* Hour: */}
+            <div className="flex justify-center items-center w-1/2 py-10 text-[200px] border border-neutral-400">
+              {hour}
+            </div>
+            {/* Minute: */}
+            <div className="flex relative justify-center w-1/2 py-10 border border-neutral-400">
+              <p className="text-[200px]">{minute}</p>
+              <p className="absolute bottom-0 right-0 p-5 text-lg">{ampm}</p>
+            </div>
+          </div>
+
+          {/* Set Timer Button */}
+          <button className="flex flex-row justify-center items-center mt-10 text-neutral-300 
+                            border-b gap-2 lowercase cursor-pointer"
+                  onClick={() => setTimerScrn(true)}
+          >
+            Start Timer
+            <ArrowRightIcon className="size-3"/>
+          </button>
+        </div>
+      )}
 
       {/* Footer */}
       <Footer/>
