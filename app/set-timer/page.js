@@ -3,6 +3,8 @@
 import { useState } from "react";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
+import Link from "next/link";
+import { ArrowLongLeftIcon, ArrowLongRightIcon } from "@heroicons/react/24/solid"
 
 
 export default function SetTimer () {
@@ -81,6 +83,21 @@ export default function SetTimer () {
             />
             <p className="text-sm mt-3">seconds</p>
           </div>
+        </div>
+
+        {/* Buttons */}
+        <div className="flex flex-row w-4/5 mt-20 items-center justify-between gap-10">
+          {/* Cancel */}
+          <Link href={"/"} className="flex flex-row justify-center items-center border-b gap-2 text-red-300">
+            <ArrowLongLeftIcon className="size-4"/>
+            cancel
+          </Link>
+          {/* Start */}
+          <Link href={{pathname: "/timer", query: { hrs: hours, mins: minutes, secs: seconds }}} 
+                className="flex flex-row justify-center items-center border-b gap-2 text-green-300">
+            start
+            <ArrowLongRightIcon className="size-4"/>
+          </Link>
         </div>
       </div>
 

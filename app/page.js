@@ -66,7 +66,7 @@ export default function Home() {
         </div>
 
         {/* Set Timer Button */}
-        <Link href={"/set-timer"}
+        <Link href={"/timer"}
               className="flex flex-row justify-center items-center mt-10 text-neutral-300 border-b gap-2 lowercase cursor-pointer">
           Start Timer
           <ArrowRightIcon className="size-3"/>
