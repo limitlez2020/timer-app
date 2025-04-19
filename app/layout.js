@@ -4,8 +4,8 @@ import "./globals.css";
 const syne = Syne({subsets: ["latin"]})
 
 export const metadata = {
-  title: "Email Agent",
-  description: "Make sending emails a breeze",
+  title: "Time",
+  description: "Make setting timer a beautiful experience",
 };
 
 export default function RootLayout({ children }) {
