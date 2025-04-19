@@ -8,6 +8,7 @@ import { ArrowRightIcon, PlayIcon } from "@heroicons/react/24/solid"
 import Link from "next/link";
 
 export default function Home() {
+  const [date, setDate] = useState("")
   const [hour, setHour] = useState("")
   const [minute, setMinute] = useState("")
   const [ampm, setAmpm] = useState("")
@@ -17,10 +18,19 @@ export default function Home() {
   /* NOTE: Date is in 24hr format -- hrs from 0 to 23 */
   useEffect(() => {
     const interval = setInterval(() => {
-      const date = new Date()
+      const now = new Date()
 
+      /* DATE: */
+      const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+      const year = now.getFullYear()
+      const month = months[now.getMonth()]
+      const day = now.getDate()
+      const date = month + " " + day + ", " + year 
+      setDate(date)
+
+      /* HOUR */
       /* Turn 24-Hour into 12-Hour format */
-      const hour = date.getHours()
+      const hour = now.getHours()
       
       /* Time: 1pm - 11pm */
       if (hour > 12) {
@@ -34,14 +44,16 @@ export default function Home() {
         {hour < 12 ? setAmpm("AM") : setAmpm("PM")}
       }
 
-      /* Minute */
-      const minute = String(date.getMinutes())
+      /* MINUTE */
+      const minute = String(now.getMinutes())
       setMinute(minute.padStart(2, "0"))
     }, 1000)
 
     /* Clear the interval: */
     return () => {clearInterval(interval)}
   }, [])
+
+
 
 
 
@@ -65,9 +77,14 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Date: */}
+        <div className="text-neutral-300 mt-5 text-2xl lowercas">
+          {date}
+        </div>
+
         {/* Set Timer Button */}
         <Link href={"/timer"}
-              className="flex flex-row justify-center items-center mt-10 text-neutral-300 border-b gap-2 lowercase cursor-pointer">
+              className="flex flex-row justify-center items-center mt-5 text-neutral-300 border-b gap-2 lowercase cursor-pointer">
           Start Timer
           <ArrowRightIcon className="size-3"/>
         </Link>
