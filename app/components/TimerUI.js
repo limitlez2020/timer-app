@@ -48,7 +48,7 @@ export default function TimerUI ({hrs, mins, secs}) {
           else if (hours === 0) {
             /* Timer is up */
             clearInterval(interval)
-            alert("Time is up")
+            alert("Time is up ⏰")
           }
         }
       }
@@ -69,15 +69,20 @@ export default function TimerUI ({hrs, mins, secs}) {
       {/* Time: */}
       <div className="flex items-end justify-between gap-5 w-4/5 text-neutral-300">
         {/* Hour: */}
-        <div className="flex justify-center items-center w-1/2 py-10 text-[200px] border border-neutral-400">
+        <div className="flex relative justify-center items-center w-1/2 py-10 text-[200px] border border-neutral-400">
           {hours}
+          <p className="flex absolute bottom-3 text-base">hours</p>
         </div>
         {/* Minute: */}
-        <div className="flex justify-center w-1/2 py-10 border border-neutral-400">
-          <p className="text-[200px]">{minutes}</p>
+        <div className="flex relative justify-center w-1/2 py-10 text-[200px] border border-neutral-400">
+          {minutes}
+          <p className="flex absolute bottom-3 text-base">minutes</p>
         </div>
         {/* Seconds */}
-        <p className="flex justify-center h-fit p-5 border border-neutral-400 text-6xl">{seconds}</p>
+        <div className="flex relative justify-center p-7 border border-neutral-400 text-6xl">
+          {String(seconds).padStart(2, "0")}
+          <p className="flex absolute bottom-1 text-xs">seconds</p>
+        </div>
       </div>
     </div>
   )

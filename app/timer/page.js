@@ -12,6 +12,7 @@ export default function Timer () {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const [isTimerSet, setIsTimerSet] = useState(false);
+  const [noTimeSet, setNoTimeSet] = useState(false)
 
 
 
@@ -37,6 +38,21 @@ export default function Timer () {
     if (input < min) { return min }
     else if (input > max) { return max }
     else { return input }
+  }
+
+
+
+
+  /* Function to handle starting the timer: */
+  const startTimer = () => {
+    /* If no time is set, display warning to user */
+    if (hours === 0 && minutes === 0 && seconds === 0) {
+      setNoTimeSet(true)
+    }
+    else {
+      /* Display the timer UI */
+      setIsTimerSet(true)
+    }
   }
 
 
@@ -93,9 +109,15 @@ export default function Timer () {
               <ArrowLongLeftIcon className="size-4"/>
               cancel
             </Link>
+
+            {/* Display warning message to user */}
+            {noTimeSet && <p className="flex text-yellow-300 opacity-90 lowercase text-sm">
+              [ please set a time ]
+            </p>}
+
             {/* Start */}
             <button className="flex flex-row justify-center items-center border-b gap-2 text-green-300 cursor-pointer"
-                    onClick={() => setIsTimerSet(true)}>
+                    onClick={startTimer}>
               start
               <ArrowLongRightIcon className="size-4"/>
             </button>
