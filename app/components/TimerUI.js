@@ -12,32 +12,6 @@ export default function TimerUI ({hrs, mins, secs}) {
   useEffect(() => {
     /* Start the countdown */
     let interval = setInterval(() => {
-      
-      setSeconds((prevSecs) => {
-        /* Decrease seconds */
-        if (prevSecs > 0) {
-          return prevSecs - 1
-        }
-
-        /* If seconds reach 0 */
-        else {
-          /* If there's still minutes - decrease minutes and reset seconds */
-          if (minutes > 0) {
-            return 59
-          }
-        }
-      })
-
-      setMinutes((prevMins) => {
-        /* If seconds is 0 - decrease minutes (if there's still minutes left) */
-        if (seconds === 0) {
-          if (prevMins > 0) {
-            return prevMins - 1
-          }
-        }
-        return prevMins
-      })
-
 
       /* PLAN: the whole thing is controlled by seconds:
        *
@@ -57,12 +31,33 @@ export default function TimerUI ({hrs, mins, secs}) {
        *         
       */
 
+      if (seconds > 0) {
+        setSeconds(prevSeconds => prevSeconds - 1)
+      }
+      else if (seconds === 0) {
+        if (minutes > 0) {
+          setMinutes(prevMinutes => prevMinutes - 1)
+          setSeconds(59)
+        }
+        else if (minutes === 0) {
+          if (hours > 0) {
+            setHours(prevHours => prevHours - 1)
+            setMinutes(59)
+            setSeconds(59)
+          }
+          else if (hours === 0) {
+            /* Timer is up */
+            clearInterval(interval)
+            alert("Time is up")
+          }
+        }
+      }
     }, 1000)
 
     /* Cleanup interval */
     return () => clearInterval(interval)
 
-  }, [])
+  }, [seconds])
 
 
 
