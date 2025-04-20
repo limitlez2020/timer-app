@@ -4,7 +4,7 @@ import Footer from "../components/Footer"
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { ArrowLongLeftIcon, ArrowLongRightIcon } from "@heroicons/react/24/solid"
-import TimerUI from "../components/TimerUI"
+import TimerCountdown from "../components/TimerCountdown"
 
 export default function Timer () {
 
@@ -67,8 +67,8 @@ export default function Timer () {
 
       {/* Body - display timer setr UI or the actual timer UI */}
       {isTimerSet ? (
-        /* Actual Timer UI */
-        <TimerUI hrs={hours} mins={minutes} secs={seconds}/>
+        /* Actual Timer Countdown UI */
+        <TimerCountdown hrs={hours} mins={minutes} secs={seconds}/>
 
       ) : (
 

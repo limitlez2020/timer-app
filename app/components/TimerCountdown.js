@@ -1,12 +1,16 @@
 "use client"
 
+import { ArrowLongLeftIcon, ArrowLongRightIcon } from "@heroicons/react/24/solid";
+import Link from "next/link";
 import { useState, useEffect } from "react"
 
-export default function TimerUI ({hrs, mins, secs}) {
+export default function TimerCountdown ({hrs, mins, secs}) {
 
   const [hours, setHours] = useState(hrs);
   const [minutes, setMinutes] = useState(mins);
   const [seconds, setSeconds] = useState(secs);
+  const [timeUp, setTimeUp] = useState(false);
+
 
   /* Function to handle timer */
   useEffect(() => {
@@ -48,7 +52,8 @@ export default function TimerUI ({hrs, mins, secs}) {
           else if (hours === 0) {
             /* Timer is up */
             clearInterval(interval)
-            alert("Time is up ⏰")
+            // alert("Time is up ⏰")
+            setTimeUp(true)
           }
         }
       }
@@ -66,24 +71,40 @@ export default function TimerUI ({hrs, mins, secs}) {
 
   return (
     <div className="flex flex-col w-full h-full mt-10 justify-center items-center bg-neutral-900 text-neutral-300">
-      {/* Time: */}
-      <div className="flex items-end justify-between gap-5 w-4/5 text-neutral-300">
-        {/* Hour: */}
-        <div className="flex relative justify-center items-center w-1/2 py-10 text-[200px] border border-neutral-400">
-          {hours}
-          <p className="flex absolute bottom-3 text-base">hours</p>
+      {timeUp ? (
+        /* Message that time is up */
+        <div className="flex flex-col items-center justify-center lowercase">
+          <p className="text-6xl">[ time is up ]</p>
+          <p className="text-sm">good job, So proud of you!</p>
+
+          {/* Link to timer page: */}
+          <button onClick={() => window.location.reload()} className="flex flex-row justify-center items-center mt-20 gap-2 border-b text-green-300 cursor-pointer">
+            set timer
+            <ArrowLongRightIcon className="size-4"/>
+          </button>
         </div>
-        {/* Minute: */}
-        <div className="flex relative justify-center w-1/2 py-10 text-[200px] border border-neutral-400">
-          {minutes}
-          <p className="flex absolute bottom-3 text-base">minutes</p>
+
+      ) : (
+
+        /* Time Countdown: */
+        <div className="flex items-end justify-between gap-5 w-4/5 text-neutral-300">
+          {/* Hour: */}
+          <div className="flex relative justify-center items-center w-1/2 py-10 text-[200px] border border-neutral-400">
+            {hours}
+            <p className="flex absolute bottom-3 text-base">hours</p>
+          </div>
+          {/* Minute: */}
+          <div className="flex relative justify-center w-1/2 py-10 text-[200px] border border-neutral-400">
+            {minutes}
+            <p className="flex absolute bottom-3 text-base">minutes</p>
+          </div>
+          {/* Seconds */}
+          <div className="flex relative justify-center p-7 border border-neutral-400 text-6xl">
+            {String(seconds).padStart(2, "0")}
+            <p className="flex absolute bottom-1 text-xs">seconds</p>
+          </div>
         </div>
-        {/* Seconds */}
-        <div className="flex relative justify-center p-7 border border-neutral-400 text-6xl">
-          {String(seconds).padStart(2, "0")}
-          <p className="flex absolute bottom-1 text-xs">seconds</p>
-        </div>
-      </div>
+      )}
     </div>
   )
 }
