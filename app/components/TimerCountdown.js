@@ -11,11 +11,16 @@ export default function TimerCountdown ({hrs, mins, secs}) {
   const [seconds, setSeconds] = useState(secs);
   const [timeUp, setTimeUp] = useState(false);
 
+  const [pause, setPause] = useState(false);
+
 
   /* Function to handle timer */
   useEffect(() => {
     /* Start the countdown */
     let interval = setInterval(() => {
+
+      /* Pause Timer: */
+      if (pause) return
 
       /* PLAN: the whole thing is controlled by seconds:
        *
@@ -57,12 +62,13 @@ export default function TimerCountdown ({hrs, mins, secs}) {
           }
         }
       }
+
     }, 1000)
 
     /* Cleanup interval */
     return () => clearInterval(interval)
 
-  }, [seconds])
+  }, [seconds, pause])
 
 
 
@@ -86,23 +92,46 @@ export default function TimerCountdown ({hrs, mins, secs}) {
 
       ) : (
 
-        /* Time Countdown: */
-        <div className="flex items-end justify-between gap-5 w-4/5 text-neutral-300">
-          {/* Hour: */}
-          <div className="flex relative justify-center items-center w-1/2 py-10 text-[200px] border border-neutral-400">
-            {hours}
-            <p className="flex absolute bottom-3 text-base">hours</p>
+        <div className="flex flex-col w-4/5">
+          {/* Time Countdown: */}
+          <div className="flex items-end justify-between gap-5 w-full text-neutral-300">
+            {/* Hour: */}
+            <div className="flex relative justify-center items-center w-1/2 py-10 text-[200px] border border-neutral-400">
+              {hours}
+              <p className="flex absolute bottom-3 text-base">hours</p>
+            </div>
+            {/* Minute: */}
+            <div className="flex relative justify-center w-1/2 py-10 text-[200px] border border-neutral-400">
+              {minutes}
+              <p className="flex absolute bottom-3 text-base">minutes</p>
+            </div>
+            {/* Seconds */}
+            <div className="flex relative justify-center p-7 border border-neutral-400 text-6xl">
+              {String(seconds).padStart(2, "0")}
+              <p className="flex absolute bottom-1 text-xs">seconds</p>
+            </div>
           </div>
-          {/* Minute: */}
-          <div className="flex relative justify-center w-1/2 py-10 text-[200px] border border-neutral-400">
-            {minutes}
-            <p className="flex absolute bottom-3 text-base">minutes</p>
+
+          {/* Pause/Resume and Stop Buttons */}
+          <div className="flex flex-row justify-between items-center gap-10 w-full mt-10">
+            {pause ? (
+              /* Resume */
+              <button className="text-green-400 border p-2 cursor-pointer" onClick={() => setPause(false)}>
+                resume
+              </button>
+            ) : (
+              /* Pause */
+              <button className="text-amber-400 border p-2 cursor-pointer" onClick={() => setPause(true)}>
+                pause
+              </button>
+            )}
+
+            {/* Stop */}
+            <button className="text-red-400 border p-2 px-3 cursor-pointer" onClick={() => setTimeUp(true)}>
+              stop
+            </button>
           </div>
-          {/* Seconds */}
-          <div className="flex relative justify-center p-7 border border-neutral-400 text-6xl">
-            {String(seconds).padStart(2, "0")}
-            <p className="flex absolute bottom-1 text-xs">seconds</p>
-          </div>
+
         </div>
       )}
     </div>
