@@ -58,12 +58,12 @@ export default function Home() {
 
 
   return (
-    <div className="flex flex-col w-full h-screen min-h-full bg-neutral-900 justify-center">
+    <div className="flex flex-col w-full h-full min-h-screen bg-neutral-900">
       {/* NavBar: */}
       <NavBar/>
 
       {/* Body: */}
-      <div className="flex flex-col w-full h-full mt-10 bg-neutral-900 justify-center items-center">
+      <div className="flex flex-col w-full h-full mt-25 mb-15 bg-neutral-900 justify-center items-center">
         {/* Time: */}
         <div className="flex justify-between gap-5 w-4/5 text-neutral-300">
           {/* Hour: */}
@@ -78,7 +78,7 @@ export default function Home() {
         </div>
 
         {/* Date: */}
-        <div className="text-neutral-300 mt-5 text-2xl lowercas">
+        <div className="text-neutral-300 mt-5 text-2xl">
           {date}
         </div>
 
