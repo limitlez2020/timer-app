@@ -63,7 +63,7 @@ export default function Home() {
       <NavBar/>
 
       {/* Body: */}
-      <div className="flex flex-col w-full h-full mt-25 mb-15 bg-neutral-900 justify-center items-center">
+      <div className="flex flex-col w-full h-full mt-25 mb-16 bg-neutral-900 justify-center items-center">
         {/* Time: */}
         <div className="flex justify-between gap-5 w-4/5 text-neutral-300">
           {/* Hour: */}

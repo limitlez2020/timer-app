@@ -61,7 +61,7 @@ export default function Timer () {
 
 
   return (
-    <div className="flex flex-col w-full h-screen min-h-full bg-neutral-900 justify-center">
+    <div className="flex flex-col w-full h-full min-h-screen bg-neutral-900">
       {/* NavBar: */}
       <NavBar/>
 
@@ -73,7 +73,7 @@ export default function Timer () {
       ) : (
 
         /* Set Timer UI */
-        <div className="flex flex-col w-full h-full mt-10 justify-center items-center bg-neutral-900 text-neutral-300">
+        <div className="flex flex-col w-full h-full mt-45 mb-32.5 justify-center items-center bg-neutral-900 text-neutral-300">
           <p className="text-neutral-300 mb-10 text-xl">Set Timer</p>
           {/* Input fields */}
           <div className="flex flex-row w-4/5 justify-between items-center gap-5 text-7xl">

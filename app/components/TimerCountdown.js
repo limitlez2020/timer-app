@@ -79,7 +79,7 @@ export default function TimerCountdown ({hrs, mins, secs}) {
     <div className="flex flex-col w-full h-full mt-10 justify-center items-center bg-neutral-900 text-neutral-300">
       {timeUp ? (
         /* Message that time is up */
-        <div className="flex flex-col items-center justify-center lowercase">
+        <div className="flex flex-col items-center justify-center mt-52.25 mb-52 lowercase">
           <p className="text-6xl">[ time is up ]</p>
           <p className="text-sm">good job, So proud of you!</p>
 
@@ -92,7 +92,7 @@ export default function TimerCountdown ({hrs, mins, secs}) {
 
       ) : (
 
-        <div className="flex flex-col w-4/5">
+        <div className="flex flex-col w-4/5 mt-17 mb-17.75">
           {/* Time Countdown: */}
           <div className="flex items-end justify-between gap-5 w-full text-neutral-300">
             {/* Hour: */}
