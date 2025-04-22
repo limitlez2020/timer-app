@@ -2,7 +2,8 @@
 
 import { ArrowLongLeftIcon, ArrowLongRightIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
+import useSound from "use-sound";
 
 export default function TimerCountdown ({hrs, mins, secs}) {
 
@@ -10,14 +11,22 @@ export default function TimerCountdown ({hrs, mins, secs}) {
   const [minutes, setMinutes] = useState(mins);
   const [seconds, setSeconds] = useState(secs);
   const [timeUp, setTimeUp] = useState(false);
+  const intervalRef = useRef(null) /* reference to the interval so, I can access it outside of the useEffect */
 
+  /* Control Timer */
   const [pause, setPause] = useState(false);
+  
+  /* Control Sound */
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [soundSrc, setSoundSrc] = useState("/music/alarm.wav")
+  const [play, { stop }] = useSound(soundSrc, {volume: 0.5, onend: () => setIsPlaying(false)})
+
 
 
   /* Function to handle timer */
   useEffect(() => {
     /* Start the countdown */
-    let interval = setInterval(() => {
+    intervalRef.current = setInterval(() => {
 
       /* Pause Timer: */
       if (pause) return
@@ -56,9 +65,13 @@ export default function TimerCountdown ({hrs, mins, secs}) {
           }
           else if (hours === 0) {
             /* Timer is up */
-            clearInterval(interval)
+            clearInterval(intervalRef.current)
             // alert("Time is up ⏰")
             setTimeUp(true)
+
+            /* Play the alarm sound */
+            play()
+            setIsPlaying(true)
           }
         }
       }
@@ -66,7 +79,7 @@ export default function TimerCountdown ({hrs, mins, secs}) {
     }, 1000)
 
     /* Cleanup interval */
-    return () => clearInterval(interval)
+    return () => clearInterval(intervalRef.current)
 
   }, [seconds, pause])
 
@@ -84,10 +97,18 @@ export default function TimerCountdown ({hrs, mins, secs}) {
           <p className="text-sm">good job, So proud of you!</p>
 
           {/* Link to timer page: */}
-          <button onClick={() => window.location.reload()} className="flex flex-row justify-center items-center mt-20 gap-2 border-b text-green-300 cursor-pointer">
-            set timer
-            <ArrowLongRightIcon className="size-4"/>
-          </button>
+          {isPlaying ? (
+            /* Stop alarm sound */
+            <button className="mt-20 text-red-400 border-b cursor-pointer" onClick={() => {stop(); setIsPlaying(false);}}>
+              stop
+            </button>
+          ) : (
+            /* Set timer */
+            <button onClick={() => window.location.reload()} className="flex flex-row justify-center items-center mt-20 gap-2 border-b text-green-300 cursor-pointer">
+              set timer
+              <ArrowLongRightIcon className="size-4"/>
+            </button>
+          )}
         </div>
 
       ) : (
@@ -127,7 +148,9 @@ export default function TimerCountdown ({hrs, mins, secs}) {
             )}
 
             {/* Stop */}
-            <button className="text-red-400 border p-2 px-3 cursor-pointer" onClick={() => setTimeUp(true)}>
+            <button className="text-red-400 border p-2 px-3 cursor-pointer"
+                    onClick={() => {setTimeUp(true); clearInterval(intervalRef.current);}}
+            >
               stop
             </button>
           </div>
