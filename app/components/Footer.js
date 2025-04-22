@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Footer () {
   return (
-    <div className="flex flex-col w-full mb-2 justify-center items-center text-neutral-400 text-sm lowercase">
+    <div className="flex flex-col w-full mb-4 sm:mb-2 justify-center items-center text-neutral-400 text-sm lowercase">
       Who made this
       {/* Links */}
       <div className="flex flex-row text-xs">
