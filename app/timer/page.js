@@ -61,7 +61,7 @@ export default function Timer () {
 
 
   return (
-    <div className="flex flex-col w-full h-full min-h-screen bg-neutral-900">
+    <div className="flex flex-col w-full h-screen min-h-screen bg-neutral-900">
       {/* NavBar: */}
       <NavBar/>
 
@@ -73,10 +73,10 @@ export default function Timer () {
       ) : (
 
         /* Set Timer UI */
-        <div className="flex flex-col w-full h-full mt-45 mb-32.5 justify-center items-center bg-neutral-900 text-neutral-300">
+        <div className="flex flex-col w-full h-full justify-center items-center bg-neutral-900 text-neutral-300">
           <p className="text-neutral-300 mb-10 text-xl">Set Timer</p>
           {/* Input fields */}
-          <div className="flex flex-row w-4/5 justify-between items-center gap-5 text-7xl">
+          <div className="flex flex-row w-4/5 justify-between items-center gap-5 text-5xl sm:text-7xl">
             {/* Hour */}
             <div className="flex flex-col justify-center items-center w-1/3">
               <input type="number" className="flex w-full border-b p-5 border-neutral-200 text-center"
@@ -111,7 +111,7 @@ export default function Timer () {
             </Link>
 
             {/* Display warning message to user */}
-            {noTimeSet && <p className="flex text-yellow-300 opacity-90 lowercase text-sm">
+            {noTimeSet && <p className="flex text-yellow-300 opacity-90 lowercase text-xs sm:text-sm">
               [ please set a time ]
             </p>}
 

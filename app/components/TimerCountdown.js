@@ -79,7 +79,7 @@ export default function TimerCountdown ({hrs, mins, secs}) {
     <div className="flex flex-col w-full h-full mt-10 justify-center items-center bg-neutral-900 text-neutral-300">
       {timeUp ? (
         /* Message that time is up */
-        <div className="flex flex-col items-center justify-center mt-52.25 mb-52 lowercase">
+        <div className="flex flex-col items-center justify-center lowercase">
           <p className="text-6xl">[ time is up ]</p>
           <p className="text-sm">good job, So proud of you!</p>
 
@@ -92,21 +92,21 @@ export default function TimerCountdown ({hrs, mins, secs}) {
 
       ) : (
 
-        <div className="flex flex-col w-4/5 mt-17 mb-17.75">
+        <div className="flex flex-col w-9/10 sm:w-4/5">
           {/* Time Countdown: */}
-          <div className="flex items-end justify-between gap-5 w-full text-neutral-300">
+          <div className="flex items-end justify-between gap-2 sm:gap-5 w-full text-neutral-300">
             {/* Hour: */}
-            <div className="flex relative justify-center items-center w-1/2 py-10 text-[200px] border border-neutral-400">
+            <div className="flex relative justify-center items-center w-2/5 h-80 sm:h-96 py-10 text-9xl sm:text-[200px] border border-neutral-400">
               {hours}
-              <p className="flex absolute bottom-3 text-base">hours</p>
+              <p className="flex absolute bottom-2 sm:bottom-3 text-base">hours</p>
             </div>
             {/* Minute: */}
-            <div className="flex relative justify-center w-1/2 py-10 text-[200px] border border-neutral-400">
+            <div className="flex relative justify-center items-center w-2/5 h-80 sm:h-96 py-10 text-9xl sm:text-[200px] border border-neutral-400">
               {minutes}
-              <p className="flex absolute bottom-3 text-base">minutes</p>
+              <p className="flex absolute bottom-2 sm:bottom-3 text-base">minutes</p>
             </div>
             {/* Seconds */}
-            <div className="flex relative justify-center p-7 border border-neutral-400 text-6xl">
+            <div className="flex relative justify-center items-center w-1/5 h-1/3 p-7 border border-neutral-400 text-4xl sm:text-7xl">
               {String(seconds).padStart(2, "0")}
               <p className="flex absolute bottom-1 text-xs">seconds</p>
             </div>
