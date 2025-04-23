@@ -1,25 +1,26 @@
 "use client"
 
 import { ArrowLongLeftIcon, ArrowLongRightIcon } from "@heroicons/react/24/solid";
+import { SpeakerXMarkIcon, SpeakerWaveIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react"
 import useSound from "use-sound";
 
 export default function TimerCountdown ({hrs, mins, secs}) {
-
+  
+  /* Control Timer */
   const [hours, setHours] = useState(hrs);
   const [minutes, setMinutes] = useState(mins);
   const [seconds, setSeconds] = useState(secs);
   const [timeUp, setTimeUp] = useState(false);
   const intervalRef = useRef(null) /* reference to the interval so, I can access it outside of the useEffect */
-
-  /* Control Timer */
   const [pause, setPause] = useState(false);
   
   /* Control Sound */
   const [isPlaying, setIsPlaying] = useState(false)
   const [soundSrc, setSoundSrc] = useState("/music/alarm.wav")
   const [play, { stop }] = useSound(soundSrc, {volume: 0.5, onend: () => setIsPlaying(false)})
+
 
 
 
@@ -152,6 +153,22 @@ export default function TimerCountdown ({hrs, mins, secs}) {
                     onClick={() => {setTimeUp(true); clearInterval(intervalRef.current);}}
             >
               stop
+            </button>
+          </div>
+
+          {/* Music: */}
+          <div className="flex w-1/2 justify-center items-center self-center gap-2 mb-7 text-sm">
+            <button className="flex w-2/12 sm:w-2/10 lg:w-1/10 border p-2 justify-center items-center cursor-pointer">
+              <SpeakerXMarkIcon className="size-4"/>
+            </button>
+
+            {/* Genre */}
+            <div className="h-full w-8/12 sm:w-6/10 lg:w-8/10 justify-center text-center border p-2">
+              <p className="animate-pulse">study music</p>
+            </div>
+
+            <button className="flex w-2/12 sm:w-2/10 lg:w-1/10 border p-2 justify-center cursor-pointer">
+              <SpeakerWaveIcon className="size-4"/>
             </button>
           </div>
 
