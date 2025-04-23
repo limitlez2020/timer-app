@@ -157,7 +157,7 @@ export default function TimerCountdown ({hrs, mins, secs}) {
           </div>
 
           {/* Music: */}
-          <div className="flex w-1/2 justify-center items-center self-center gap-2 mb-7 text-sm">
+          <div className="flex w-3/5 md:w-1/2 justify-center items-center self-center gap-2 mb-7 text-sm">
             <button className="flex w-2/12 sm:w-2/10 lg:w-1/10 border p-2 justify-center items-center cursor-pointer">
               <SpeakerXMarkIcon className="size-4"/>
             </button>
