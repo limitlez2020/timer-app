@@ -14,12 +14,27 @@ export default function TimerCountdown ({hrs, mins, secs}) {
   const [seconds, setSeconds] = useState(secs);
   const [timeUp, setTimeUp] = useState(false);
   const intervalRef = useRef(null) /* reference to the interval so, I can access it outside of the useEffect */
-  const [pause, setPause] = useState(false);
+  const [pauseTimer, setPauseTimer] = useState(false);
   
-  /* Control Sound */
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [soundSrc, setSoundSrc] = useState("/music/alarm.wav")
-  const [play, { stop }] = useSound(soundSrc, {volume: 0.5, onend: () => setIsPlaying(false)})
+  /* Alarm Sound */
+  const [isAlarmOn, setIsAlarmOn] = useState(false)
+  const [playAlarm, { stop: stopAlarm }] = useSound("/music/alarm.wav", {
+    volume: 0.2,
+    onend: () => setIsAlarmOn(false),
+  })
+
+  /* Background Music */
+  const TOTAL_SONGS = 10
+  const [currentSong, setCurrentSong] = useState(1)
+  const [musicPlaying, setMusicPlaying] = useState(false)
+  const [playMusic, { stop: stopMusic, pause: pauseMusic }] = useSound(`/music/jazz/${currentSong}.mp3`, {
+    volume: 0.2,
+    onend: () => {
+      /* Move to next song */
+      const nextSong = (currentSong === TOTAL_SONGS) ? 1 : currentSong + 1
+      setCurrentSong(nextSong)
+    }
+  })
 
 
 
@@ -30,7 +45,7 @@ export default function TimerCountdown ({hrs, mins, secs}) {
     intervalRef.current = setInterval(() => {
 
       /* Pause Timer: */
-      if (pause) return
+      if (pauseTimer) return
 
       /* PLAN: the whole thing is controlled by seconds:
        *
@@ -67,12 +82,14 @@ export default function TimerCountdown ({hrs, mins, secs}) {
           else if (hours === 0) {
             /* Timer is up */
             clearInterval(intervalRef.current)
-            // alert("Time is up ⏰")
             setTimeUp(true)
 
             /* Play the alarm sound */
-            play()
-            setIsPlaying(true)
+            playAlarm()
+            setIsAlarmOn(true)
+
+            /* Turn off background music */
+            stopMusic()
           }
         }
       }
@@ -82,7 +99,49 @@ export default function TimerCountdown ({hrs, mins, secs}) {
     /* Cleanup interval */
     return () => clearInterval(intervalRef.current)
 
-  }, [seconds, pause])
+  }, [seconds, pauseTimer])
+
+
+
+
+  /* Stop the timer: */
+  const stopTimer = () => {
+    setTimeUp(true)
+    clearInterval(intervalRef.current)
+
+    /* stop background music */
+    stopMusic()
+  }
+
+
+
+  /* Play next song automatically when the current song is over */
+  useEffect(() => {
+    playMusic()
+  }, [currentSong])
+
+
+
+
+  /* Play music only when no music is playing */
+  const handleUnmute = () => {
+    if (musicPlaying === false) {
+      playMusic()
+      /* update music state */
+      setMusicPlaying(true)
+    }
+  }
+
+
+
+  /* Mute or pause the music */
+  const handleMute = () => {
+    if (musicPlaying) {
+      pauseMusic()
+      /* update music state: */
+      setMusicPlaying(false)
+    }
+  }
 
 
 
@@ -98,9 +157,9 @@ export default function TimerCountdown ({hrs, mins, secs}) {
           <p className="text-sm">good job, So proud of you!</p>
 
           {/* Link to timer page: */}
-          {isPlaying ? (
+          {isAlarmOn ? (
             /* Stop alarm sound */
-            <button className="mt-20 text-red-400 border-b cursor-pointer" onClick={() => {stop(); setIsPlaying(false);}}>
+            <button className="mt-20 text-red-400 border-b cursor-pointer" onClick={() => {stopAlarm(); setIsAlarmOn(false);}}>
               stop
             </button>
           ) : (
@@ -114,6 +173,7 @@ export default function TimerCountdown ({hrs, mins, secs}) {
 
       ) : (
 
+        /*********  TIME COUNTDOWN SCREEN  ***********/
         <div className="flex flex-col w-9/10 sm:w-4/5">
           {/* Time Countdown: */}
           <div className="flex items-end justify-between gap-2 sm:gap-5 w-full text-neutral-300">
@@ -136,29 +196,30 @@ export default function TimerCountdown ({hrs, mins, secs}) {
 
           {/* Pause/Resume and Stop Buttons */}
           <div className="flex flex-row justify-between items-center gap-10 w-full mt-10">
-            {pause ? (
+            {pauseTimer ? (
               /* Resume */
-              <button className="text-green-400 border p-2 cursor-pointer" onClick={() => setPause(false)}>
+              <button className="text-green-400 border p-2 cursor-pointer" onClick={() => setPauseTimer(false)}>
                 resume
               </button>
             ) : (
               /* Pause */
-              <button className="text-amber-400 border p-2 cursor-pointer" onClick={() => setPause(true)}>
+              <button className="text-amber-400 border p-2 cursor-pointer" onClick={() => setPauseTimer(true)}>
                 pause
               </button>
             )}
 
             {/* Stop */}
             <button className="text-red-400 border p-2 px-3 cursor-pointer"
-                    onClick={() => {setTimeUp(true); clearInterval(intervalRef.current);}}
+                    onClick={stopTimer}
             >
               stop
             </button>
           </div>
 
-          {/* Music: */}
-          <div className="flex w-3/5 md:w-1/2 justify-center items-center self-center gap-2 mb-7 text-sm">
-            <button className="flex w-2/12 sm:w-2/10 lg:w-1/10 border p-2 justify-center items-center cursor-pointer">
+
+          {/* Music + Controls: */}
+          <div className="flex w-3/5 md:w-1/2 justify-center items-center self-center gap-2 mt-5 mb-7 text-sm">
+            <button onClick={handleMute} className="flex w-2/12 sm:w-2/10 lg:w-1/10 border p-2 justify-center items-center cursor-pointer">
               <SpeakerXMarkIcon className="size-4"/>
             </button>
 
@@ -167,7 +228,8 @@ export default function TimerCountdown ({hrs, mins, secs}) {
               <p className="animate-pulse">study music</p>
             </div>
 
-            <button className="flex w-2/12 sm:w-2/10 lg:w-1/10 border p-2 justify-center cursor-pointer">
+            {/* Unmute */}
+            <button onClick={handleUnmute} className="flex w-2/12 sm:w-2/10 lg:w-1/10 border p-2 justify-center cursor-pointer">
               <SpeakerWaveIcon className="size-4"/>
             </button>
           </div>
