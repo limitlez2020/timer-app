@@ -18,7 +18,7 @@ export default function TimerCountdown ({hrs, mins, secs}) {
   
   /* Alarm Sound */
   const [isAlarmOn, setIsAlarmOn] = useState(false)
-  const [playAlarm, { stop: stopAlarm }] = useSound("/music/alarm.wav", {
+  const [playAlarm, { stop: stopAlarm }] = useSound("/music/alarm.mp3", {
     volume: 0.2,
     onend: () => setIsAlarmOn(false),
   })
