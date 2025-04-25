@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowLongLeftIcon, ArrowLongRightIcon } from "@heroicons/react/24/solid";
+import { ArrowLongRightIcon } from "@heroicons/react/24/solid";
 import { SpeakerXMarkIcon, SpeakerWaveIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react"
@@ -23,9 +23,11 @@ export default function TimerCountdown ({hrs, mins, secs}) {
     onend: () => setIsAlarmOn(false),
   })
 
+
   /* Background Music */
-  const TOTAL_SONGS = 10
-  const [currentSong, setCurrentSong] = useState(1)
+  // TODO: change back to 10
+  const TOTAL_SONGS = 13
+  const [currentSong, setCurrentSong] = useState(11)
   const [musicPlaying, setMusicPlaying] = useState(false)
   const [playMusic, { stop: stopMusic, pause: pauseMusic }] = useSound(`/music/jazz/${currentSong}.mp3`, {
     volume: 0.2,
@@ -34,11 +36,70 @@ export default function TimerCountdown ({hrs, mins, secs}) {
       const nextSong = (currentSong === TOTAL_SONGS) ? 1 : currentSong + 1
       setCurrentSong(nextSong)
     }
-  })
+  })  
+  
+
+
+  /*******  AUTOPLAY CORE MECHANISM **********/
+  /* The key idea is that the useSound hook dynamically creates a
+   * sound instance based on the currentSong state. When currentSong
+   * changes, useSound effectively provides a new set of playMusic,
+   * stopMusic, and pauseMusic functions that are linked to the new
+   * audio file. Your useEffect is designed to react to these changes
+   * and manage the playback transition smoothly.
+   **/
+
+  /* Play next song automatically when the current song is over */
+  useEffect(() => {
+    if (musicPlaying) {
+      console.log(`Attempting to play song ${currentSong}`)
+      playMusic()
+    }
+    /* Cleanup function to prevent the song that was previously
+     * playing from being repeated by playMusic call above
+     * NOTE:
+     * This runs when the effect's dependencies change (before the effect runs again)
+     * or when the component unmounts. It stops the sound associated with the
+     * *previous* render's useSound instance (and thus the previous currentSong).
+     **/
+    return () => {
+      stopMusic()
+    }
+  }, [currentSong, playMusic])
+  /* Dependencies:
+   * currentSong -> calls the useEffect function when the currentSong number changes
+   * playMusic -> calls "  " when the playMusic function chages. i.e. when the playMusic
+   *              function is now updated to the new useSound instance that contains the
+   *              new sound url. Basically when the sound url updates, it sort of creates a
+   *              new useSound instance with the functions attached to it like playMusic.
+   **/
 
 
 
 
+  /* Play music only when no music is playing */
+  const handleUnmute = () => {
+    if (!musicPlaying) {
+      playMusic()
+      /* update music state */
+      setMusicPlaying(true)
+    }
+  }
+
+
+  /* Mute or pause the music */
+  const handleMute = () => {
+    if (musicPlaying) {
+      pauseMusic()
+      /* update music state: */
+      setMusicPlaying(false)
+    }
+  }
+
+
+
+
+  /************   TIMER COUNTDOWN  *************/
   /* Function to handle timer */
   useEffect(() => {
     /* Start the countdown */
@@ -63,22 +124,22 @@ export default function TimerCountdown ({hrs, mins, secs}) {
        *       - If hours is 0:
        *            - Timer is up (seconds, minutes, and hour are all zero at this point)
        *         
-      */
+      */ 
 
       if (seconds > 0) {
         setSeconds(prevSeconds => prevSeconds - 1)
-      }
+      }  
       else if (seconds === 0) {
         if (minutes > 0) {
           setMinutes(prevMinutes => prevMinutes - 1)
           setSeconds(59)
-        }
+        }  
         else if (minutes === 0) {
           if (hours > 0) {
             setHours(prevHours => prevHours - 1)
             setMinutes(59)
             setSeconds(59)
-          }
+          }  
           else if (hours === 0) {
             /* Timer is up */
             clearInterval(intervalRef.current)
@@ -90,16 +151,16 @@ export default function TimerCountdown ({hrs, mins, secs}) {
 
             /* Turn off background music */
             stopMusic()
-          }
-        }
-      }
+          }  
+        }  
+      }  
 
-    }, 1000)
+    }, 1000)  
 
     /* Cleanup interval */
     return () => clearInterval(intervalRef.current)
 
-  }, [seconds, pauseTimer])
+  }, [seconds, pauseTimer])  
 
 
 
@@ -111,37 +172,8 @@ export default function TimerCountdown ({hrs, mins, secs}) {
 
     /* stop background music */
     stopMusic()
-  }
+  }  
 
-
-
-  /* Play next song automatically when the current song is over */
-  useEffect(() => {
-    playMusic()
-  }, [currentSong])
-
-
-
-
-  /* Play music only when no music is playing */
-  const handleUnmute = () => {
-    if (musicPlaying === false) {
-      playMusic()
-      /* update music state */
-      setMusicPlaying(true)
-    }
-  }
-
-
-
-  /* Mute or pause the music */
-  const handleMute = () => {
-    if (musicPlaying) {
-      pauseMusic()
-      /* update music state: */
-      setMusicPlaying(false)
-    }
-  }
 
 
 
@@ -219,7 +251,7 @@ export default function TimerCountdown ({hrs, mins, secs}) {
 
           {/* Music + Controls: */}
           <div className="flex w-3/5 md:w-1/2 justify-center items-center self-center gap-2 mt-5 mb-7 text-sm">
-            <button onClick={handleMute} className="flex w-2/12 sm:w-2/10 lg:w-1/10 border p-2 justify-center items-center cursor-pointer">
+            <button onClick={handleMute} className={`${!musicPlaying && "bg-neutral-700"} flex w-2/12 sm:w-2/10 lg:w-1/10 border p-2 justify-center items-center cursor-pointer`}>
               <SpeakerXMarkIcon className="size-4"/>
             </button>
 
@@ -229,7 +261,7 @@ export default function TimerCountdown ({hrs, mins, secs}) {
             </div>
 
             {/* Unmute */}
-            <button onClick={handleUnmute} className="flex w-2/12 sm:w-2/10 lg:w-1/10 border p-2 justify-center cursor-pointer">
+            <button onClick={handleUnmute} className={`${musicPlaying && "bg-neutral-700"} flex w-2/12 sm:w-2/10 lg:w-1/10 border p-2 justify-center cursor-pointer`}>
               <SpeakerWaveIcon className="size-4"/>
             </button>
           </div>
