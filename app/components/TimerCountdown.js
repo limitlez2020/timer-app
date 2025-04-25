@@ -25,9 +25,8 @@ export default function TimerCountdown ({hrs, mins, secs}) {
 
 
   /* Background Music */
-  // TODO: change back to 10
-  const TOTAL_SONGS = 13
-  const [currentSong, setCurrentSong] = useState(11)
+  const TOTAL_SONGS = 10
+  const [currentSong, setCurrentSong] = useState(1)
   const [musicPlaying, setMusicPlaying] = useState(false)
   const [playMusic, { stop: stopMusic, pause: pauseMusic }] = useSound(`/music/jazz/${currentSong}.mp3`, {
     volume: 0.2,
